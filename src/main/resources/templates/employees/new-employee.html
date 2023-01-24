@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace = "layouts :: header"></head>
+
+<body>
+
+	<!--nav th:replace = "layouts :: navbar"--><!--/nav-->
+	
+	<nav th:fragment = "navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" th:href="@{/}">Project IO</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	
+	  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0"> 
+	    	<li class="nav-item">
+	        <a class="nav-link" th:href="@{/}">Home</a>
+	        <li class="nav-item active">
+	      	
+	        <a class="nav-link" th:href="@{/employees/}">Employees</a>
+	      </li>
+	       
+	    	<li class="nav-item">
+	        	<a class="nav-link" th:href="@{/projects/}">Projects</a>
+	      	</li>
+	      	<li class="nav-item">
+	        	<a class="nav-link" th:href="@{/register/}">Register New User</a>
+	      	</li>
+	      	<li class="nav-item">
+	        	<a class="nav-link" th:href="@{/logout}">Log Out</a>
+	      	</li>
+	    </ul>
+	  </div>
+	</nav>
+	
+	<br>
+	
+	<div class="container">
+		<form action="/employees/save" th:object="${employee}" method="POST">
+		
+		<!-- this will be used to bind to the employee that was clicked on, used for updates -->
+		<input type="hidden" th:field="${employee.employeeId}"/>
+		
+		<div class="form-group row">
+			<input type="text" placeholder="Employee First Name" th:field="${employee.firstName}">
+			<span style="color:red" th:if="${#fields.hasErrors('firstName')}"
+				th:errors="${employee.firstName}">
+			</span>
+		</div>
+		<div class="form-group row">
+			<input type="text" placeholder="Employee Last Name" th:field="${employee.lastName}">
+			<span style="color:red" th:if="${#fields.hasErrors('lastName')}"
+				th:errors="${employee.lastName}">
+			</span>
+		</div>
+		<div class="form-group row">
+			<input type="text" placeholder="Employee Email Address" th:field="${employee.email}">
+			<span style="color:red" th:if="${#fields.hasErrors('email')}"
+				th:errors="${employee.email}">
+			</span>
+		</div>
+		
+		<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+		
+		<button class = "btn btn-info col-2" type="submit">Enter Employee</button>
+		</form>
+	</div>
+	
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace = "layouts :: header"></head>
+
+<body>
+	
+	<!--nav th:replace = "layouts :: navbar"--><!--/nav-->
+	
+	<nav th:fragment = "navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" th:href="@{/}">Project IO</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	
+	  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0"> 
+	    	<li class="nav-item">
+	        <a class="nav-link" th:href="@{/}">Home</a>
+	        <li class="nav-item">
+	      	
+	        <a class="nav-link" th:href="@{/employees/}">Employees</a>
+	      </li>
+	       
+	    	<li class="nav-item">
+	        	<a class="nav-link active" th:href="@{/projects/}">Projects</a>
+	      	</li>
+	      	<li class="nav-item">
+	        	<a class="nav-link" th:href="@{/register/}">Register New User</a>
+	      	</li>
+	      	<li class="nav-item">
+	        	<a class="nav-link" th:href="@{/logout}">Log Out</a>
+	      	</li>
+	    </ul>
+	  </div>
+	</nav>
+	
+	<br>
+	
+	<div class="container">
+		<form action="/projects/save" th:object="${project}" method="POST">
+		
+		<div class="form-group row">
+			<input type="text" placeholder="Project Name" th:field="${project.name}">
+		</div>
+		
+		<div class="form-group row">
+			<select th:field="${project.stage}">
+				<option th:value="NOTSTARTED"> Not Started</option>
+				<option th:value="INPROGRESS"> In Progress</option>
+				<option th:value="COMPLETED"> Completed</option>
+			</select>
+		</div>
+		
+		<div class="form-group row">
+			<textarea type="text" placeholder="Enter Project Description" th:field="${project.description}"></textarea>
+		</div>
+		<!--astericks used to reference a property that is inside of the parent object
+		this is basically short hand for "${project.employees}" , multiple field means it's a multi-select item'-->
+		
+		<div class="form-group row">
+			<select th:field="*{employees}" multiple="multiple">
+				<!-- when user selects employee field, we'll loop through a list of employees and return each employee ID, 
+				and return the textual representation of the data for the user -->
+				<option th:each = "employee : ${allEmployees}"
+						th:value = "${employee.employeeId}"
+						th:text = "${employee.firstName}">
+				</option>
+			</select>
+		</div>
+		
+		Project Start Date:
+			<div class="form-group row">
+				<input id="dp3" type="text" class="mb-4 col-2 col-xs-4" value="Start Date" th:field="${project.startDate}">
+			</div>
+			
+		Project End Date:
+			<div class="form-group row">
+				<input id="dp4" type="text" class="mb-4 col-2 col-xs-4" value="End Date" th:field="${project.endDate}">
+			</div>
+		
+		<script type="text/javascript">
+			$('#dp3').datepicker({
+				    beforeShow: function(input, inst) {
+				        inst.dpDiv.css({
+				            marginTop: -input.offsetHeight + 'px', 
+				            marginLeft: input.offsetWidth + 'px'
+				        });
+				    }
+				});
+			$('#dp4').datepicker({
+				    beforeShow: function(input, inst) {
+				        inst.dpDiv.css({
+				            marginTop: -input.offsetHeight + 'px', 
+				            marginLeft: input.offsetWidth + 'px'
+				        });
+				    }
+				});
+		</script>
+		
+		<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+		
+		<button class="btn btn-info col-2" type="submit">Enter Project</button>
+		
+		</form>
+	</div>
+	
+</body>
+
+</html>

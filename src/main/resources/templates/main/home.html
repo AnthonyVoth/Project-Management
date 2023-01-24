@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace = "layouts :: header"></head>
+
+<body>
+	<!--nav th:replace = "layouts :: navbar"--><!--/nav-->
+	
+	<nav th:fragment = "navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" th:href="@{/}">Project IO</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	
+	  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0"> 
+	    	<li class="nav-item active">
+	        	<a class="nav-link" th:href="@{/}">Home</a>
+		        <li class="nav-item">
+		        	<a class="nav-link" th:href="@{/employees/}">Employees</a>
+		     	 </li>
+	       
+		    	<li class="nav-item">
+		        	<a class="nav-link" th:href="@{/projects/}">Projects</a>
+		      	</li>
+		      	<li class="nav-item">
+		        	<a class="nav-link" th:href="@{/register/}">Register New User</a>
+		      	</li>
+		      	<li class="nav-item">
+		        	<a class="nav-link" th:href="@{/logout}">Log Out</a>
+		      	</li>
+	    </ul>
+	  </div>
+	</nav>
+
+<div class="container">
+
+<h3>Main Dashboard</h3>
+	<a th:text="${versionNumber}"></a>
+	<hr>
+	
+	<h4>Current Projects </h4>
+	<div class="row">
+		<div class="col-md-6">
+			<hr>
+			<!-- Add New Project Button -->
+			<a th:href="@{/projects/new}"
+				class="btn btn-primary btn-sm mb-3">
+				New Project
+			</a>
+			<table class = "table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th>Project Name</th>
+						<th>Project Stage</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+				<tr th:each="aProject : ${projectsList}">
+					<td th:text="${aProject.name}"/>
+					<td th:text="${aProject.stage}"/>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-4">
+			<canvas id="myPieChart" height="50" width="50"></canvas>
+			
+			<!-- while in the "script" tags, I am writing in JavaScript for Thymeleaf exclusively -->
+			<script>
+				var chartData = "[[${projectStatusCnt}]]"
+			</script>
+		</div>
+	</div>
+	
+	
+	
+</div>
+	
+<div class="container">
+	<h4>Current Employees </h4>
+	<div class="row">
+		<div class="col-md-6">
+			<hr>
+			
+			<!-- Add New Employee Button -->
+			<a th:href="@{/employees/new}"
+				class="btn btn-primary btn-sm mb-3">
+				New Employee
+			</a>
+			
+			<table class = "table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th>Employee First Name</th>
+						<th>Employee Last Name</th>
+						<th>Employee Project Count</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+				<!-- changed when we added in the custom SQL Query to pull in counts of employees on projects
+				<tr th:each="aEmployee : ${employeesList}">
+				-->
+				<tr th:each="aEmployeeProjectCnt : ${employeesListProjectCnt}">
+					<td th:text="${aEmployeeProjectCnt.firstName}"/>
+					<td th:text="${aEmployeeProjectCnt.lastName}"/>
+					<!-- also changed with the addition of the custom SQL Query
+					<td th:text="${aEmployee.email}"/>
+					-->
+					<td th:text="${aEmployeeProjectCnt.projectCount}"/>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+	<!-- proper form is to have all the HTML loaded first, then have your javascript towards the bottom -->
+	<script type="text/javascript" th:src="@{js/myChart.js}"></script>
+</body>
+
+</html>
